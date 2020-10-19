@@ -1,4 +1,7 @@
 import urllib3
+import os
+
+from src.config import DATASET_PATH
 
 dataset_urls = [
     'http://cs.joensuu.fi/sipu/datasets/t4.8k.txt',
@@ -21,5 +24,6 @@ if __name__ == '__main__':
         response = http.request('GET', url)
         data = response.data.decode('UTF-8')
         name = url.split('/')[-1]
+        name = os.path.join(DATASET_PATH, name)
         with open(name, 'w') as file:
             file.write(data)
