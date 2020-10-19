@@ -11,7 +11,8 @@ dataset_urls = [
     'http://cs.joensuu.fi/sipu/datasets/wine.txt',
     'http://cs.joensuu.fi/sipu/datasets/breast.txt',
     'http://cs.joensuu.fi/sipu/datasets/iris.txt',
-    'http://cs.joensuu.fi/sipu/datasets/Aggregation.txt'
+    'http://cs.joensuu.fi/sipu/datasets/Aggregation.txt',
+    'http://cs.joensuu.fi/sipu/datasets/dim064.txt',
 ]
 
 if __name__ == '__main__':

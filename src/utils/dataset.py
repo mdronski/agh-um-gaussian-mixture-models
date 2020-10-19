@@ -18,6 +18,7 @@ def load(dataset_name: str) -> pd.DataFrame:
                      engine='python',
                      header=None)
     df.columns = df.columns.astype(str)
+    df.name = dataset_name.split('.')[0]
     return df
 
 
@@ -38,6 +39,7 @@ def visualize_many(datasets: List):
 
 def visualize(dataset: pd.DataFrame, clustering_results: np.ndarray = None, ax=None):
     df = dataset.copy()
+    df.name = dataset.name
     if len(dataset.columns) != 2:
         df = reduce_dims(dataset)
     x = df.columns[0]
@@ -47,7 +49,7 @@ def visualize(dataset: pd.DataFrame, clustering_results: np.ndarray = None, ax=N
         'data': df,
         'x': x,
         'y': y,
-        'edgecolor': "none"
+        'edgecolor': "none",
     }
 
     if clustering_results is not None:
@@ -62,7 +64,9 @@ def visualize(dataset: pd.DataFrame, clustering_results: np.ndarray = None, ax=N
         ax.set_yticks([])
         sns_arguments['ax'] = ax
 
-    sns.scatterplot(**sns_arguments)
+    plot = sns.scatterplot(**sns_arguments)
+    plot.set_title(df.name)
+    return plot
 
 
 
@@ -71,4 +75,5 @@ def reduce_dims(dataset: pd.DataFrame):
     dataset_2d = pca.fit_transform(dataset)
     df = pd.DataFrame(dataset_2d)
     df.columns = df.columns.astype(str)
+    df.name = dataset.name
     return df
