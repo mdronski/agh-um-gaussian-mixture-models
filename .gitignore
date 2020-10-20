@@ -1,0 +1,4 @@
+/resources/datasets/*
+!/resources/datasets/.gitkeep
+__pycache__
+.vscode/

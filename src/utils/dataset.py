@@ -22,22 +22,19 @@ def load(dataset_name: str) -> pd.DataFrame:
     return df
 
 
-def visualize_many(datasets: List):
-    # for two column plot
-    # n_col = 2
-    # n_row = math.ceil(len(datasets) / n_col)
-    # figsize = (n_row*10, n_col*10)
-    # fig, axes = plt.subplots(n_row, n_col, sharey='none', sharex='none', figsize=figsize)
-    fig, axes = plt.subplots(len(datasets), 1, sharey='none', sharex='none', figsize=(10, len(datasets)*10))
-    for dataset, ax in zip(datasets, list(axes.flat)):
-        if type(dataset) == tuple:
-            df, cluster_res = dataset
-            visualize(df, cluster_res, ax=ax)
-        else:
-            visualize(dataset, ax=ax)
+def visualize_many(datasets: List[List[Tuple[str, pd.DataFrame, np.ndarray]]]) -> None:
+    n_row = len(datasets)
+    n_col = max(len(row) for row in datasets)
+    figsize = (n_col*5, n_row*5)
+    _, axes = plt.subplots(n_row, n_col, sharey='none', sharex='none', figsize=figsize)
+    for r in range(n_row):
+        for c in range(n_col):
+            ax = axes[r][c]
+            title, df, cluster_res = datasets[r][c]
+            visualize(df, cluster_res, ax=ax, title=title)
 
 
-def visualize(dataset: pd.DataFrame, clustering_results: np.ndarray = None, ax=None):
+def visualize(dataset: pd.DataFrame, clustering_results: np.ndarray = None, ax=None, title=None) -> None:
     df = dataset.copy()
     df.name = dataset.name
     if len(dataset.columns) != 2:
@@ -65,12 +62,10 @@ def visualize(dataset: pd.DataFrame, clustering_results: np.ndarray = None, ax=N
         sns_arguments['ax'] = ax
 
     plot = sns.scatterplot(**sns_arguments)
-    plot.set_title(df.name)
-    return plot
+    plot.set_title(title or df.name)
 
 
-
-def reduce_dims(dataset: pd.DataFrame):
+def reduce_dims(dataset: pd.DataFrame) -> pd.DataFrame:
     pca = PCA(n_components=2)
     dataset_2d = pca.fit_transform(dataset)
     df = pd.DataFrame(dataset_2d)
