@@ -18,7 +18,7 @@ def load(dataset_name: str) -> pd.DataFrame:
                      engine='python',
                      header=None)
     df.columns = df.columns.astype(str)
-    df.name = dataset_name.split('.')[0]
+    df.name = dataset_name[:-4]
     return df
 
 
